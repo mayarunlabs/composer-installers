@@ -7,6 +7,7 @@ class MayaInstaller extends BaseInstaller
     /** @var array<string, string> */
     protected $locations = array(
         'module' => 'modules/{$name}/',
+        'theme' => 'themes/{$name}/'
     );
 
     /**
@@ -20,6 +21,10 @@ class MayaInstaller extends BaseInstaller
             return $this->inflectModuleVars($vars);
         }
 
+        if ($vars['type'] === 'maya-theme') {
+            return $this->inflectThemeVars($vars);
+        }
+
         return $vars;
     }
 
@@ -30,6 +35,19 @@ class MayaInstaller extends BaseInstaller
     protected function inflectModuleVars(array $vars): array
     {
         $vars['name'] = $this->pregReplace('/-module$/', '', $vars['name']);
+        $vars['name'] = str_replace(array('-', '_'), ' ', $vars['name']);
+        $vars['name'] = str_replace(' ', '', ucwords($vars['name']));
+
+        return $vars;
+    }
+
+    /**
+     * @param array<string, string> $vars
+     * @return array<string, string>
+     */
+    protected function inflectModuleVars(array $vars): array
+    {
+        $vars['name'] = $this->pregReplace('/-theme$/', '', $vars['name']);
         $vars['name'] = str_replace(array('-', '_'), ' ', $vars['name']);
         $vars['name'] = str_replace(' ', '', ucwords($vars['name']));
 
